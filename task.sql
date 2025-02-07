@@ -10,10 +10,12 @@ START TRANSACTION;
 INSERT INTO Orders (CustomerID, Date)
 VALUES (1, '2023-01-01');
 
-INSERT INTO OrderItems (ID, count)
-VALUES (1, 1);
+SET @OrderID = LAST_INSERT_ID();
 
-UPDATE Products SET WarehouseAmount= WarehouseAmount -1 WHERE ID = '1';
+INSERT INTO OrderItems (OrderID, ProductID, count)
+VALUES (@OrderID, 1, 1);
+
+UPDATE Products SET WarehouseAmount= WarehouseAmount -1 WHERE ID = 1;
 SELECT WarehouseAmount INTO @StockCheck FROM Products WHERE ID = 1;
 IF @StockCheck >= 0 THEN
     COMMIT;
